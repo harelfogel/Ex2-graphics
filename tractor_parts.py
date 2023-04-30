@@ -1,9 +1,6 @@
 import math
 from bezier import Bezier
 
-
-
-
 def flip_y(y, canvas_height):
     return canvas_height - y
 
@@ -248,21 +245,21 @@ class CockpitRoofLine(TractorPart):
 
         return roof_line
 
-class ChimneyLine(TractorPart):
+class Chimney(TractorPart):
     def __init__(self, horizontal_line, length, offset_x):
+        super().__init__()
         self.horizontal_line = horizontal_line
         self.length = length
         self.offset_x = offset_x
 
     def get_drawing_data(self):
-        horizontal_line_data = self.horizontal_line.get_drawing_data()
-        x1 = horizontal_line_data[0][0] + self.offset_x
-        y1 = horizontal_line_data[0][1]
-        x2 = x1
-        y2 = y1 - self.length
-        color = "#FF0000"  # You can change the color to your preference
-        return [(x1, y1, x2, y2, color)]
+        horizontal_line_rightmost_point = max(self.horizontal_line.get_drawing_data(), key=lambda point: point[0])
+        vertical_line_start = (horizontal_line_rightmost_point[0] - self.offset_x, horizontal_line_rightmost_point[1])
+        vertical_line_end = (horizontal_line_rightmost_point[0] - self.offset_x, horizontal_line_rightmost_point[1] - self.length)
 
+        vertical_line = [
+            (vertical_line_start[0], vertical_line_start[1], 0, 8),
+            (vertical_line_end[0], vertical_line_end[1], 0, 8),
+        ]
 
-
-
+        return vertical_line
