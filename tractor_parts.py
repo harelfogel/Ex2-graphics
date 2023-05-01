@@ -1,5 +1,6 @@
 import math
 from bezier import Bezier
+from random import randint
 
 def flip_y(y, canvas_height):
     return canvas_height - y
@@ -245,6 +246,26 @@ class CockpitRoofLine(TractorPart):
 
         return roof_line
 
+
+class ChimneyCircles(TractorPart):
+    def __init__(self, horizontal_line, length, offset_x, circle_radius):
+        super().__init__()
+        self.horizontal_line = horizontal_line
+        self.length = length
+        self.offset_x = offset_x
+        self.circle_radius = circle_radius
+
+    def get_drawing_data(self):
+        horizontal_line_rightmost_point = max(self.horizontal_line.get_drawing_data(), key=lambda point: point[0])
+        vertical_line_start = (horizontal_line_rightmost_point[0] - self.offset_x, horizontal_line_rightmost_point[1])
+        vertical_line_end = (vertical_line_start[0], vertical_line_start[1] - self.length)
+        return [(vertical_line_start[0], vertical_line_start[1], vertical_line_end[0], vertical_line_end[1], 1)]
+
+    def draw_chimney_circle(self):
+        chimney_top = (self.get_drawing_data()[0][2], self.get_drawing_data()[0][3])
+        chimney_circle_center = (chimney_top[0], chimney_top[1] - self.circle_radius)
+        return [(chimney_circle_center[0], chimney_circle_center[1], self.circle_radius, 0)]
+
 class Chimney(TractorPart):
     def __init__(self, horizontal_line, length, offset_x):
         super().__init__()
@@ -258,8 +279,8 @@ class Chimney(TractorPart):
         vertical_line_end = (horizontal_line_rightmost_point[0] - self.offset_x, horizontal_line_rightmost_point[1] - self.length)
 
         vertical_line = [
-            (vertical_line_start[0], vertical_line_start[1], 0, 8),
-            (vertical_line_end[0], vertical_line_end[1], 0, 8),
+            (vertical_line_start[0], vertical_line_start[1], 0, 7),
+            (vertical_line_end[0], vertical_line_end[1], 0, 7),
         ]
 
         return vertical_line
