@@ -5,6 +5,46 @@ from tractor_parts import FrontCurve, FrontWheel
 from transform_tractor import mirror_tractor, rotate_tractor, move_tractor, scale_tractor
 
 
+def create_help_tab(parent, notebook, vertices, canvas, update_callback):
+    help_frame = tk.Frame(notebook)
+    notebook.add(help_frame, text="Help")
+
+    help_text = tk.Text(help_frame, wrap=tk.WORD, padx=10, pady=10, width=80, height=30)
+    help_text.pack(expand=True, fill='both')
+
+    help_content = """
+    Move tab:
+    - Use the "Manual" option to move the tractor by entering the desired X and Y coordinates.
+    - Use the X and Y sliders to move the tractor horizontally and vertically by the mouse. You can Click on the mouse and drag the tractor vertically and horizontally.
+
+    Scale tab:
+    - Use the slider to scale the tractor proportionally.
+    - You can also enter a custom scale factor in the input box.
+
+    Rotate tab:
+    - You can  enter a custom rotation angle in the input box.
+
+    Mirror tab:
+    - Use the "Horizontal" and "Vertical" buttons to flip the tractor horizontally and vertically.
+
+    Crop tab:
+    - "Crop" button: Automatically removes any white space around the tractor image.
+    - "Manual" crop: Use the Top, Bottom, Left, and Right input boxes to enter custom crop values for each side of the tractor image. Press the "Apply" button to apply the manual crop.
+
+    Download tab:
+    - Use the "Upload" button to save the tractor image as a new data file.
+
+    Reset tab:
+    - Use the "Reset" button to reset the tractor image to its original state.
+
+    Exit tab:
+    - Use the "Exit" button to exit the application and save the changes to the tractor image.
+    """
+
+    help_text.insert(tk.INSERT, help_content)
+    help_text.config(state=tk.DISABLED)
+
+
 def create_upload_tab(notebook, tab_control, data_filename):
     upload_frame = ttk.Frame(tab_control)
     tab_control.add(upload_frame, text="Download")
@@ -391,6 +431,7 @@ def create_window(vertices,data_filename, update_callback=None):
     create_mirror_tab(notebook, notebook, vertices, canvas, update_callback)
     create_crop_tab(notebook, notebook, canvas)
     create_upload_tab(notebook, notebook, data_filename)
+    create_help_tab(notebook, notebook, vertices, canvas, update_callback)
     create_reset_tab(notebook, notebook, vertices, canvas, update_callback)
     create_exit_tab(notebook, notebook, vertices, canvas, update_callback)
 
